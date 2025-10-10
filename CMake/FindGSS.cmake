@@ -154,13 +154,11 @@ if(NOT _gss_FOUND)  # Not found by pkg-config. Let us take more traditional appr
         set(GSS_FLAVOUR "MIT")
       endif()
     else()
-      # I am not convinced if this is the right way but this is what autotools do at the moment
-      find_path(_gss_INCLUDE_DIRS NAMES "gssapi.h" HINTS ${_gss_root_hints} PATH_SUFFIXES "include" "inc")
-      find_path(_gss_INCLUDE_DIRS NAMES "gss.h"    HINTS ${_gss_root_hints} PATH_SUFFIXES "include")
+      find_path(_gss_INCLUDE_DIRS NAMES "gss.h" HINTS ${_gss_root_hints} PATH_SUFFIXES "include")
 
       if(_gss_INCLUDE_DIRS)
         set(GSS_FLAVOUR "GNU")
-        set(GSS_PC_REQUIRES "gss")
+        set(GSS_PC_REQUIRES ${_gnu_modname})
       endif()
     endif()
 
@@ -211,10 +209,10 @@ else()
   # _pkg_check_modules_pkg_name is undocumented and used as a fallback for CMake <3.16 versions.
   if(_gss_MODULE_NAME STREQUAL _gnu_modname OR _pkg_check_modules_pkg_name STREQUAL _gnu_modname)
     set(GSS_FLAVOUR "GNU")
-    set(GSS_PC_REQUIRES "gss")
+    set(GSS_PC_REQUIRES ${_gnu_modname})
   elseif(_gss_MODULE_NAME STREQUAL _mit_modname OR _pkg_check_modules_pkg_name STREQUAL _mit_modname)
     set(GSS_FLAVOUR "MIT")
-    set(GSS_PC_REQUIRES "mit-krb5-gssapi")
+    set(GSS_PC_REQUIRES ${_mit_modname})
   else()
     message(FATAL_ERROR "GNU or MIT GSS is required")
   endif()
